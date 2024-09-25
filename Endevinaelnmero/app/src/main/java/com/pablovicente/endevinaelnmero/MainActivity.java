@@ -24,6 +24,7 @@ import java.util.Random;
 public class MainActivity extends AppCompatActivity {
 
     private int numberToGuess;
+    private int contador = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         final Button guessButton = findViewById(R.id.guessButton);
         final TextView textView = findViewById(R.id.textView);
+        final TextView textView2 = findViewById(R.id.textView2);
         final EditText editText = findViewById(R.id.editText);
         final ScrollView scrollView = findViewById(R.id.ScrollView);
 
@@ -46,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
                         && keyEvent.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
 
                     guessButton.performClick();
-
                     Toast.makeText(MainActivity.this, "Enter pressed", Toast.LENGTH_SHORT).show();
                     return true;
                 }
@@ -69,7 +70,11 @@ public class MainActivity extends AppCompatActivity {
                     int guessedNumber = Integer.parseInt(introducedNumber);
 
                     if (guessedNumber == numberToGuess) {
+                        contador++;
+
                         addMessageToTextView("Número correcte, felicitats!");
+                        contador = 0;
+                        actualitzaContador(contador, textView2);
 
                         congratsGameDialogFragment dialogFragment = new congratsGameDialogFragment();
                         dialogFragment.show(getSupportFragmentManager(), "GAME DIALOG");
@@ -78,8 +83,12 @@ public class MainActivity extends AppCompatActivity {
 
                     } else if (guessedNumber < numberToGuess) {
                         addMessageToTextView("Número introduït: " + editText.getText().toString() + " - El número és més gran.");
+                        contador++;
+                        actualitzaContador(contador, textView2);
                     } else {
                         addMessageToTextView("Número introduït: " + editText.getText().toString() + " - El número és més petit.");
+                        contador++;
+                        actualitzaContador(contador, textView2);
                     }
                     editText.setText("");
 
@@ -110,5 +119,9 @@ public class MainActivity extends AppCompatActivity {
                     });
             return builder.create();
         }
+    }
+
+    public static void actualitzaContador(int contador, TextView textView) {
+        textView.setText("Intents: " + contador);
     }
 }

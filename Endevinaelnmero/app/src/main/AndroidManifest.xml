@@ -18,7 +18,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:hint="number"/>
+        android:imeOptions="actionDone"
+        android:hint="Introdueix un número"/>
 
     <Button
         android:id="@+id/guessButton"
@@ -33,14 +34,14 @@
 
     <ScrollView
         android:id="@+id/ScrollView"
-        android:layout_width="356dp"
-        android:layout_height="165dp"
+        android:layout_width="279dp"
+        android:layout_height="169dp"
         app:layout_constraintBottom_toTopOf="@+id/editText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.29"
+        app:layout_constraintHorizontal_bias="0.765"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.494">
+        app:layout_constraintVertical_bias="0.465">
 
         <TextView
             android:id="@+id/textView"
@@ -53,4 +54,14 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.472" />
     </ScrollView>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Intents: 0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guessButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
