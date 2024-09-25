@@ -3,14 +3,13 @@ package com.pablovicente.endevinaelnmero;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -21,58 +20,75 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    private int numberToGuess;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
         final Button guessButton = findViewById(R.id.guessButton);
         final TextView textView = findViewById(R.id.textView);
         final EditText editText = findViewById(R.id.editText);
+        final ScrollView scrollView = findViewById(R.id.ScrollView);
 
         Random random = new Random();
-        final int numberToGuess = random.nextInt(100);
+        numberToGuess = random.nextInt(100);
 
         guessButton.setOnClickListener(new View.OnClickListener() {
 
-            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View view) {
                 String introducedNumber = editText.getText().toString();
 
-                if (introducedNumber.equals(numberToGuess+"")) {
-                    textView.setText("Número correcte, felicitats");
-                    final int numberToGuess = random.nextInt(100);
-                    congratsGameDialogFragment dialogFragment = new congratsGameDialogFragment();
-                    dialogFragment.show(getSupportFragmentManager(), "GAME DIALOG");
-                } else if (Integer.parseInt(introducedNumber) < numberToGuess) {
-                    textView.setText("El número és més gran");
-                } else if (Integer.parseInt(introducedNumber) > numberToGuess) {
-                    textView.setText("El número és més petit");
-                } else {
-                    textView.setText("Error");
+                if (introducedNumber.isEmpty()) {
+                    addMessageToTextView("Número introduït: " + editText.getText().toString() + " - Introduïu un número.");
+                    return;
+                }
+
+                try {
+                    int guessedNumber = Integer.parseInt(introducedNumber);
+
+                    if (guessedNumber == numberToGuess) {
+                        addMessageToTextView("Número correcte, felicitats!");
+
+                        congratsGameDialogFragment dialogFragment = new congratsGameDialogFragment();
+                        dialogFragment.show(getSupportFragmentManager(), "GAME DIALOG");
+                        numberToGuess = random.nextInt(100);
+                        textView.setText("");
+
+                    } else if (guessedNumber < numberToGuess) {
+                        addMessageToTextView("Número introduït: " + editText.getText().toString() + " - El número és més gran.");
+                    } else {
+                        addMessageToTextView("Número introduït: " + editText.getText().toString() + " - El número és més petit.");
+                    }
+                    editText.setText("");
+
+                } catch (NumberFormatException e) {
+                    addMessageToTextView("Número introduït: " + editText.getText().toString() + " - Introduïu un número vàlid.");
                 }
             }
+
+            private void addMessageToTextView(String message) {
+                textView.append(message + "\n");
+                scrollView.fullScroll(View.FOCUS_DOWN);
+            }
         });
-
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
-
     }
 
-    public class congratsGameDialogFragment extends DialogFragment {
+    public static class congratsGameDialogFragment extends DialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Use the Builder class for convenient dialog construction.
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("Felicitats, el número introduït és correcte");
+            builder.setMessage("Felicitats, el número introduït és correcte")
+                    .setPositiveButton("OK", (dialog, id) -> {
+                    });
             return builder.create();
         }
     }
