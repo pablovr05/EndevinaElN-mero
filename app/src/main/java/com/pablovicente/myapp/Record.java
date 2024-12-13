@@ -1,0 +1,19 @@
+package com.pablovicente.myapp;
+
+public class Record {
+    private String name;
+    private int attempts;
+
+    public Record(String name, int attempts) {
+        this.name = name;
+        this.attempts = attempts;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAttempts() {
+        return attempts;
+    }
+}
